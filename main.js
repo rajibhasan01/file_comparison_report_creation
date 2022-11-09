@@ -3,17 +3,23 @@ import * as fs from 'fs';
 // internal import
 import { getFilesFromDir } from './getFilesFromDir.js';
 import { getFramePerSecondFromFileName } from './fpsCount.js';
+import { alphNumericName } from './generateUniqueId.js';
 
 // media file directory
-const fileDir = '/home/rajibhasan/Desktop/gifbuz-tump/MovFile/';
+const fileDir = '/home/rajibhasan/Desktop/gifbuz-tump/MovFile';
 
 
 // Main Function
 const mainFunction = async () => {
     try {
         const files = await getFilesFromDir(fileDir);
-        files.forEach((fileName, index) => {
-            console.log(`${index}. ${fileName}`)
+        files.forEach(async(fileName, index) => {
+            // const newName = alphNumericName() + '.MOV';
+            // await fs.promises.rename(`${fileDir}/${fileName}`, `${fileDir}/${newName}`);
+
+            const fps = await getFramePerSecondFromFileName(`${fileDir}/${fileName}`);
+            console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps}`);
+
         })
     } catch (error) {
         console.log("Error => ", error);
