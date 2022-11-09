@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 // internal import
 import { getFilesFromDir } from './getFilesFromDir.js';
+import { getFileSize } from './fileSize.js';
 import { getFramePerSecondFromFileName } from './fpsCount.js';
 import { alphNumericName } from './generateUniqueId.js';
 
@@ -18,7 +19,10 @@ const mainFunction = async () => {
             // await fs.promises.rename(`${fileDir}/${fileName}`, `${fileDir}/${newName}`);
 
             const fps = await getFramePerSecondFromFileName(`${fileDir}/${fileName}`);
-            console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps}`);
+            const size = await getFileSize(`${fileDir}/${fileName}`);
+            console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps} ==== ${size.bytes}`);
+
+            
 
         })
     } catch (error) {
