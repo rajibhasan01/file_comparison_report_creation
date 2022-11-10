@@ -1,8 +1,12 @@
 
 import * as pdf from 'html-pdf';
 import * as ejs from 'ejs';
+import * as fs from 'fs';
 
-export const createPdf = async (data) => {
+//internal import
+import { alphNumericName } from './generateUniqueId.js';
+
+export const createPdf = async (data, targetDir) => {
     return new Promise ((resolve, reject) => {
         // pdf generate options
         let options = {
@@ -16,12 +20,18 @@ export const createPdf = async (data) => {
             },
         };
 
+        const reportDir = `${targetDir}/report/${alphNumericName()}.pdf`;
+
+        if (!fs.existsSync(`${targetDir}/report`)) {
+            fs.mkdirSync(`${targetDir}/report`);
+        }
+
         try {
             ejs.renderFile('./report-template.ejs', {data: data}, (err, report) => {
                 if (err) {
                     reject(err);
                 } else {
-                    pdf.create(report, options).toFile("/home/rajibhasan/Desktop/gifBuzTestfile/report/Report_2.pdf", (err, report) => {
+                    pdf.create(report, options).toFile(reportDir, (err, report) => {
                         if(err){
                             reject(err);
                         } else {
