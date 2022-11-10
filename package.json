@@ -17,5 +17,9 @@
     "url": "https://github.com/rajibhasan01/file_comparison_report_creation/issues"
   },
   "homepage": "https://github.com/rajibhasan01/file_comparison_report_creation#readme",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "html-pdf": "^3.0.1"
+  }
 }
