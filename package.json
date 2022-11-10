@@ -7,8 +7,15 @@
     "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajibhasan01/file_comparison_report_creation.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajibhasan01/file_comparison_report_creation/issues"
+  },
+  "homepage": "https://github.com/rajibhasan01/file_comparison_report_creation#readme",
   "type": "module"
-
 }
