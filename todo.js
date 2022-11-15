@@ -7,6 +7,7 @@ import { getFileSize } from './fileSize.js';
 import { getFramePerSecondFromFileName } from './fpsCount.js';
 import { convertMp4ToGif } from './fileConverter.js';
 import { alphNumericName } from './generateUniqueId.js';
+import { avrgRightCornerColor } from './addTextToGif.js';
 
 export const toDo = async (fileDir, tragetDir) => {
     return new Promise(async(resolve, reject) => {
@@ -28,6 +29,7 @@ export const toDo = async (fileDir, tragetDir) => {
 
             const result = [];
             let itemsProcessed = 0;
+            let count = 0;
 
             const files = await getFilesFromDir(fileDir);
             files.forEach(async(fileName, index) => {
@@ -56,6 +58,9 @@ export const toDo = async (fileDir, tragetDir) => {
                     const hdSize = await getFileSize(`${hdDir}/${key}.gif`);
                     const hd2sdSize = await getFileSize(`${hd2sdGif}/${key}.gif`);
 
+                    // Get the avrg top right corner color [selective area is (80,30) from (5,5) axis]
+                    const avrgColor = await avrgRightCornerColor(`${fileDir}/${fileName}`);
+
                     const fileDetails = {};
                     fileDetails["Name"] = fileName;
                     fileDetails["DefaultFps"] = fps.original;
@@ -69,14 +74,16 @@ export const toDo = async (fileDir, tragetDir) => {
                     fileDetails["HDSizeInMB"] = Number(hdSize.mb.toFixed(2));
                     fileDetails["HD2SDSizeInByte"] = hd2sdSize.bytes;
                     fileDetails["HD2SDSizeInMB"] = Number(hd2sdSize.mb.toFixed(2));
+                    fileDetails['topRightCornerAvrgColor'] = Number(avrgColor);
 
-                    result[index] = fileDetails;
+                    result[count++] = fileDetails;
 
                 }
                 // console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps} ==== ${size.bytes}`);
 
                 itemsProcessed++;
                 if(itemsProcessed === files.length) {
+                    console.log(result)
                     resolve(result);
                 }
 
