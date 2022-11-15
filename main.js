@@ -5,13 +5,12 @@ import { config } from './config.js';
 
 // media file directory
 const fileDir = config.fileDir;
-const baseDir = config.baseDir;
+const baseDir = config.baseDir ? config.baseDir : fileDir;
 
 // Main Function
 const mainFunction = async () => {
     try {
         const result = await toDo(fileDir, baseDir);
-        console.log("result", result);
         const res = await createPdf(result, baseDir);
         console.log(res)
 

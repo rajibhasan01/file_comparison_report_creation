@@ -32,49 +32,53 @@ export const toDo = async (fileDir, tragetDir) => {
             const files = await getFilesFromDir(fileDir);
             files.forEach(async(fileName, index) => {
                 const ext = path.extname(fileName);
-                const key = alphNumericName();
-                const newName = key + ext;
-                await fs.promises.rename(`${fileDir}/${fileName}`, `${fileDir}/${newName}`);
-                fileName = newName;
+                const fileType = ['.mp4', '.gif', '.mov'];
+                if(fileType.indexOf(ext.toLocaleLowerCase()) !== -1){
+                    const key = alphNumericName();
+                    const newName = key + ext;
+                    await fs.promises.rename(`${fileDir}/${fileName}`, `${fileDir}/${newName}`);
+                    fileName = newName;
 
-                const fps = await getFramePerSecondFromFileName(`${fileDir}/${fileName}`);
+                    const fps = await getFramePerSecondFromFileName(`${fileDir}/${fileName}`);
 
-                // Create HD gif from media file
-                convertMp4ToGif(`${fileDir}/${fileName}`, `${hdDir}/${fileName}`, fps.HDFps);
+                    // Create HD gif from media file
+                    convertMp4ToGif(`${fileDir}/${fileName}`, `${hdDir}/${fileName}`, fps.HDFps);
 
-                // Create SD gif from media file
-                convertMp4ToGif(`${fileDir}/${fileName}`, `${sdDir}/${fileName}`, fps.SDFps);
+                    // Create SD gif from media file
+                    convertMp4ToGif(`${fileDir}/${fileName}`, `${sdDir}/${fileName}`, fps.SDFps);
 
-                // Create SD gif from HD gif file
-                convertMp4ToGif(`${hdDir}/${key}.gif`, `${hd2sdGif}/${fileName}`, fps.SDFps);
+                    // Create SD gif from HD gif file
+                    convertMp4ToGif(`${hdDir}/${key}.gif`, `${hd2sdGif}/${fileName}`, fps.SDFps);
 
-                // Get the file size
-                const size = await getFileSize(`${fileDir}/${fileName}`);
-                const sdSize = await getFileSize(`${sdDir}/${key}.gif`);
-                const hdSize = await getFileSize(`${hdDir}/${key}.gif`);
-                const hd2sdSize = await getFileSize(`${hd2sdGif}/${key}.gif`);
+                    // Get the file size
+                    const size = await getFileSize(`${fileDir}/${fileName}`);
+                    const sdSize = await getFileSize(`${sdDir}/${key}.gif`);
+                    const hdSize = await getFileSize(`${hdDir}/${key}.gif`);
+                    const hd2sdSize = await getFileSize(`${hd2sdGif}/${key}.gif`);
 
-                const fileDetails = {};
-                fileDetails["Name"] = fileName;
-                fileDetails["DefaultFps"] = fps.original;
-                fileDetails["HDFps"] = fps.HDFps;
-                fileDetails["SDFps"] = fps.SDFps;
-                fileDetails["OrginalSizeInByte"] = size.bytes;
-                fileDetails["OrginalSizeInMB"] = Number(size.mb.toFixed(2));
-                fileDetails["SDSizeInByte"] = sdSize.bytes;
-                fileDetails["SDSizeInMB"] = Number(sdSize.mb.toFixed(2));
-                fileDetails["HDSizeInByte"] = hdSize.bytes;
-                fileDetails["HDSizeInMB"] = Number(hdSize.mb.toFixed(2));
-                fileDetails["HD2SDSizeInByte"] = hd2sdSize.bytes;
-                fileDetails["HD2SDSizeInMB"] = Number(hd2sdSize.mb.toFixed(2));
+                    const fileDetails = {};
+                    fileDetails["Name"] = fileName;
+                    fileDetails["DefaultFps"] = fps.original;
+                    fileDetails["HDFps"] = fps.HDFps;
+                    fileDetails["SDFps"] = fps.SDFps;
+                    fileDetails["OrginalSizeInByte"] = size.bytes;
+                    fileDetails["OrginalSizeInMB"] = Number(size.mb.toFixed(2));
+                    fileDetails["SDSizeInByte"] = sdSize.bytes;
+                    fileDetails["SDSizeInMB"] = Number(sdSize.mb.toFixed(2));
+                    fileDetails["HDSizeInByte"] = hdSize.bytes;
+                    fileDetails["HDSizeInMB"] = Number(hdSize.mb.toFixed(2));
+                    fileDetails["HD2SDSizeInByte"] = hd2sdSize.bytes;
+                    fileDetails["HD2SDSizeInMB"] = Number(hd2sdSize.mb.toFixed(2));
 
-                result[index] = fileDetails;
+                    result[index] = fileDetails;
+
+                }
+                // console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps} ==== ${size.bytes}`);
 
                 itemsProcessed++;
                 if(itemsProcessed === files.length) {
                     resolve(result);
                 }
-                // console.log(`${index}. ${fileName} ================== ${fps.original} ==== ${fps.HDFps} ==== ${fps.SDFps} ==== ${size.bytes}`);
 
             });
         } catch (error){
