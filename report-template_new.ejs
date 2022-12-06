@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        table {
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        </style>
+    </head>
+    <body>
+        <div style="width: 85%; margin: 0 7.5%;">
+            <div style="text-align: center; padding-left: 50px;">
+                <% let fail = data.pop().sdFail %>
+                <h3>File Comparision Report</h3>
+                <h4> percentage of Fail = <%= fail / parseInt(data.length) * 100 %> </h4>
+                <table>
+                    <th>
+                        <td>File Name</td>
+                        <td>Width</td>
+                        <td>Custom Width</td>
+                        <td>Default Fps</td>
+                        <td>SD Fps </td>
+                        <td>Orginal Size (Byte)</td>
+                        <td>Orginal Size (MB)</td>
+                        <td>SD Size (Byte)</td>
+                        <td>SD Size (MB)</td>
+                        <td>Thumb Size (Byte)</td>
+                        <td>Thumb Size (MB)</td>
+                        <td>HD > SD</td>
+                        <td>HD > Thumb</td>
+                    </th>
+                <% if (data.length > 0) { %>
+                    <% data.forEach((data, index) => { index++%>
+
+                       <tr>
+                            <td><%= index %></td>
+                            <td><%= data.Name %></td>
+                            <td><%= data.OriginalWidth %></td>
+                            <td><%= data.CustomWidth %></td>
+                            <td><%= data.DefaultFps %></td>
+                            <td><%= data.SDFps %></td>
+                            <td><%= data.OrginalSizeInByte %></td>
+                            <td><%= data.OrginalSizeInMB %></td>
+                            <td><%= data.SDSizeInByte %></td>
+                            <td><%= data.SDSizeInMB %></td>
+                            <td><%= data.ThumbSizeInByte %></td>
+                            <td><%= data.ThumbSizeInMB %></td>
+                            <td><%= data.SDSizeInByte < data.OrginalSizeInByte ? "Pass" : 'Fail' %></td>
+                            <td><%= data.ThumbSizeInByte < data.OrginalSizeInByte ? "Pass" : 'Fail' %></td>
+
+                        </tr>
+                    <%  });%>
+                <% }%>
+                <th></th>
+                <th> Total Failed = <%= fail %></th>
+                <th> Total Passed = <%= parseInt(data.length) - fail %></th>
+                <th> percentage of Fail = <%= fail / parseInt(data.length) * 100 %></th>
+                </table>
+             </div>
+        </div>
+    </body>
+</html>

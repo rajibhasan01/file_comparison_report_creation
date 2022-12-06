@@ -11,7 +11,7 @@ export const createPdf = async (data, targetDir) => {
         // pdf generate options
         let options = {
             "height": "20in",
-            "width": "20in",
+            "width": "22in",
             "header": {
                 "height": "20mm"
             },
@@ -27,7 +27,7 @@ export const createPdf = async (data, targetDir) => {
         }
 
         try {
-            ejs.renderFile('./report-template.ejs', {data: data}, (err, report) => {
+            ejs.renderFile('./report-template_new.ejs', {data: data}, (err, report) => {
                 if (err) {
                     reject(err);
                 } else {
